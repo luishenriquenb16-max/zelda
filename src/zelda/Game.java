@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 
 public class Game extends Canvas implements Runnable, KeyListener {
 
-	public static int WIDTH = 640, HEIGTH = 480;
+	public static int WIDTH = 720, HEIGTH = 480;
 	public static int SCALE = 3;
 	public static Player player;
 	public Pedro pedro;
@@ -35,15 +35,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void tick() {
+        player.tick();
 
-		player.tick();
+        // Loop atualizado para controlar a vida e a remoção dos inimigos
+        for (int i = inimigos.size() - 1; i >= 0; i--) {
+            Pedro inimigoAtual = inimigos.get(i);
+            inimigoAtual.tick();
 
-		for (int i = 0; i < inimigos.size(); i++) {
-			inimigos.get(i).tick();
-
-		}
-		// render();
-	}
+            // Se a vida do Pedro zerar ou ficar menor que zero, remove do jogo
+            if (inimigoAtual.vida <= 0) {
+                inimigos.remove(i);
+            }
+        }
+    }
 
 	public void render() {
 		BufferStrategy bs = this.getBufferStrategy();
@@ -74,20 +78,24 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		Game jogo = new Game();
 		JFrame frame = new JFrame();
 
-		frame.add(jogo);
 		frame.setTitle("Mini Zelda");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new java.awt.BorderLayout());
+
+		// Garantir tamanho/área do Canvas (importante para o BufferStrategy)
+		//jogo.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGTH * SCALE));
+		jogo.setSize(1024, 768);
+		frame.add(jogo, java.awt.BorderLayout.CENTER);
 
 		frame.pack();
-
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		frame.setResizable(false);
 		frame.setVisible(true);
 
+		jogo.requestFocus();
 		new Thread(jogo).start();
-
-		return;
 	}
+
 
 	@Override
 	public void run() {

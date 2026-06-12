@@ -24,4 +24,13 @@ public class Blocks extends Rectangle  {
 
 
 	}
+
+    private static class bullets {
+
+
+
+        public bullets() {
+			
+        }
+    }
 }
