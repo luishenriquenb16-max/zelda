@@ -1,3 +1,7 @@
 bin/
 .vscode/
-*.class
+*.classsrc/zelda/oracleJdk-25/
+bin/
+.settings/
+.classpath
+.project
